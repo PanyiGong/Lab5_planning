@@ -1,40 +1,23 @@
-let circleX 
-let circleY 
-let circledx 
-let circledy
-let rectX, rectY, rectdx, rectdy;
-let circleRadius;
-let rectWidth, rectHeight;
-let circleColor, rectColor;
-let BGColor
+//let circle,rectangle
+//let circleY 
+//let circledx 
+//let circledy
+//let rectX, rectY, rectdx, rectdy;
+//let circleRadius;
+//let rectWidth, rectHeight;
+//let circleColor, rectColor;
+//let BGColor
 
 function setup() {
   createCanvas(400,400);
   createRandomBGColor()
   noStroke()
   // Randomize the size of the circle and rectangle
-  circleRadius = random(10,30); // Random radius between 10,30
-  rectWidth = random(10,30);    // Random width between 10,30
-  rectHeight = random(10,30);    // Random height between 20,40
+    c = createcircle();
+    r = createRect();
+  
 //-----------------------------------------------
-  
-  
-  // Create a circle with random position and speed
-  circleX = random(circleRadius, width - circleRadius);
-  circleY = random(circleRadius, height - circleRadius);
-  circledx = random(-3, 3);
-  circledy = random(-3, 3);
-  
-  //Create a circle with random position and speed
-  rectX = random(rectWidth, width - rectWidth);
-  rectY = random(rectHeight, height - rectHeight);
-  rectdx = random(-3, 3);
-  rectdy = random(-3, 3);
-  
-  
-  // Randomize colors for the circle and rectangle
-  circleColor = color(random(255), random(255), random(255));
-  rectColor = color(random(255), random(255), random(255));
+
 
 }
 
@@ -42,52 +25,86 @@ function setup() {
 
 function draw() {
   background(bg);
-  
+ 
   // Draw circle
-  fill(circleColor);
-  circle(circleX, circleY, circleRadius);
+
+  fill(c.c);
+  circle(c.x,c.y,c.r * 2);
   
   // Draw rectangle with random color
-  fill(rectColor);
-  rect(rectX, rectY, rectWidth, rectHeight);
+  fill(r.c);
+  rect(r.x, r.y, r.w, r.h);
   
   // Movement--------------------------
-  circleX += circledx;
-  circleY += circledy;
+  c.x += c.dx;
+  c.y += c.dy;
   
-  rectX += rectdx;
-  rectY += rectdy;
+  r.x += r.dx;
+  r.y += r.dy;
+  
+   overlap(c,r)
 //--------------------------------------------
   
+   function overlap(c,r) {
   // Check for wall collisions for the circle
-  if (circleX - circleRadius < 0 || circleX + circleRadius > width) {
-    circledx *= -1;
+  if (c.x - c.r < 0 || c.x + c.r > width) {
+    c.dx *= -1;
   }
   
-  if (circleY - circleRadius < 0 || circleY + circleRadius > height) {
-    circledy *= -1;
+  if (c.y - c.r < 0 || c.y + c.r > height) {
+    c.dy *= -1;
   }
   
-  // Check for wall collisions for the rectangle
-  if (rectX < 0 || rectX + rectWidth > width) {
-    rectdx *= -1;
+ 
+  if (r.x < 0 || r.x + r.w > width) {
+    r.dx *= -1;
   }
-  if (rectY < 0 || rectY + rectHeight > height) {
-    rectdy *= -1;
+  if (r.y < 0 || r.y + r.h > height) {
+    r.dy *= -1;
   }
+  
+  
   
   // Horizontal collision of two object
-  if (circleX + circleRadius > rectX && circleX - circleRadius < rectX + rectWidth &&
+  if (c.x + c.r > r.x && c.x - c.r < r.x + r.w &&
 // Vertical collision of two object
-      circleY + circleRadius > rectY && circleY - circleRadius < rectY + rectHeight) {
+      c.y + c.r > r.y && c.y - c.r < r.y + r.h) {
 //---------------------------------------------
-    circledx *= -1;
-    circledy *= -1;
-    rectdx *= -1;
-    rectdy *= -1;
+    c.dx *= -1;
+    c.dy *= -1;
+    r.dx *= -1;
+    r.dy *= -1;
+  }
   }
 }
 
+
+  function createcircle() {
+    r = random(10,30)
+    return{
+    c: color(random(255),random(255),random(255)),
+    x: random(r, width - r),
+    y: random(r, height - r),
+    r:r,
+    dx: random(-3, 3),
+    dy: random(-3, 3)
+      
+  }
+  }
+function createRect() {
+  w = random(10,30)
+  h = random(10,30)
+  return{
+    c: color(random(255),random(255),random(255)),
+    x: random(w, width - w),
+    y: random(h, height - h),
+    w: w,
+    h: h, 
+    dx: random(-3,3),
+    dy: random(-3,3)
+}
+}
+  
 function createRandomBGColor() {
   bg = color(random(255), random(255), random(255))
 }
